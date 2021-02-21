@@ -1,0 +1,16 @@
+{
+  "name": "finallyHere",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "dotenv": "^8.2.0",
+    "image-to-base64": "^2.1.1",
+    "node-fetch": "^2.6.1",
+    "puppeteer": "^5.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
