@@ -1,0 +1,13 @@
+[
+  {
+    "id":0,
+    "storeName":"Amazon",
+    "nation":"🇮🇹",
+    "url":"https://amzn.to/3k17ktH",
+    "name":"PS5 Digital AMZN",
+    "selector":"#add-to-cart-button",
+    "price":401,
+    "category":"console",
+    "available":false
+  }
+]
