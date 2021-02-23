@@ -50,13 +50,34 @@ const openEveryPages = async (browser, targets) => {
         try {
             if (i == 0) {
                 const pages = await browser.pages();
-                await pages[0].goto(targets[0].url, { waitUntil: 'load', timeout: 10000 })
+                await pages[0].setRequestInterception(true)
+
+                pages[0].on('request', interceptedRequest => {
+                    if (interceptedRequest.url().endsWith('.png') || interceptedRequest.url().endsWith('.jpg'))
+                        interceptedRequest.abort();
+                    else
+                        interceptedRequest.continue();
+                });
+
+                await pages[0].goto(targets[0].url, { waitUntil: 'domcontentloaded', timeout: 10000 })
                 pages[0].available = targets[0].available
                 pages[0].storeIndex = 0
                 await scanPage(pages[0], targets[0])
             } else {
                 const page = await browser.newPage();
-                await page.goto(targets[i].url, { waitUntil: 'load', timeout: 10000 })
+
+                await page.setRequestInterception(true)
+
+                page.on('request', interceptedRequest => {
+                    if (interceptedRequest.url().endsWith('.png') ||
+                        interceptedRequest.url().endsWith('.jpg') ||
+                        interceptedRequest.url().endsWith('.css'))
+                        interceptedRequest.abort();
+                    else
+                        interceptedRequest.continue();
+                });
+
+                await page.goto(targets[i].url, { waitUntil: 'domcontentloaded', timeout: 10000 })
                 page.available = targets[i].available
                 page.storeIndex = i
                 await scanPage(page, targets[i]);
@@ -76,12 +97,15 @@ const reloadEveryPages = async (pages, firstLoading) => {
             const target = targets[i];
             await page.setCacheEnabled(false)
             await page.bringToFront();
-            !firstLoading ?
-                await page.reload({ waitUntil: 'load', timeout: 10000 }) :
-                false
 
+            console.log(`Scanning ${target.name}`)
+            console.time('reload');
+            !firstLoading
+                ? await page.goto(target.url, { waitUntil: 'domcontentloaded', timeout: 10000 })
+                : false
+            console.timeEnd('reload');
             await scanPage(page, target)
-            await page.waitForTimeout(1500)
+            await page.waitForTimeout(500)
         } catch (error) {
             console.error(`Errore 2: ${error.message}`)
         }
@@ -91,7 +115,6 @@ const reloadEveryPages = async (pages, firstLoading) => {
 }
 
 const scanPage = async (page, target) => {
-    console.log(`Scanning ${target.name}`)
     const amazonCaptcha = await page.$('#captchacharacters');
     if (amazonCaptcha != null) {
         // We got a captcha
