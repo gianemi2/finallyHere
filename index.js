@@ -197,6 +197,7 @@ const sendTelegramNotification = async (target, text = false, silent = false) =>
 *{AMAZON ${target.nation}}*
 ⚠️ *${target.name} è disponibile!!!* ⚠️
 🛒 *Url: ${target.url}*
+
 `
         const openInApp = `📱 [Apri in app](${target.longUrl})`
         const wunderfulMsg = 'longUrl' in target ? defaultMsg + openInApp : defaultMsg
