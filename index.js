@@ -195,8 +195,9 @@ const sendTelegramNotification = async (target, text = false, silent = false) =>
     try {
         const wunderfulMsg = `
 *{AMAZON ${target.nation}}*
-⚠️ *${target.name} è disponibile!!!* ⚠️
-🛒 *Url: ${target.url}* 🛒`
+⚠️ *${target.name} è disponibile!!!*
+🛒 *Url: ${target.url}*
+📱 [Apri in app](${target.longUrl})`
         const forFreeMessage = `
 
 @finallyHereNotify
