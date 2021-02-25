@@ -193,11 +193,13 @@ const updateStores = (stockStatus, storeIndex) => {
 
 const sendTelegramNotification = async (target, text = false, silent = false) => {
     try {
-        const wunderfulMsg = `
+        const defaultMsg = `
 *{AMAZON ${target.nation}}*
-⚠️ *${target.name} è disponibile!!!*
+⚠️ *${target.name} è disponibile!!!* ⚠️
 🛒 *Url: ${target.url}*
-📱 [Apri in app](${target.longUrl})`
+`
+        const openInApp = `📱 [Apri in app](${target.longUrl})`
+        const wunderfulMsg = 'longUrl' in target ? defaultMsg + openInApp : defaultMsg
         const forFreeMessage = `
 
 @finallyHereNotify
