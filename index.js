@@ -55,6 +55,7 @@ const openEveryPages = async (browser, targets) => {
     for (let i = 0; i < targets.length; i++) {
         console.log(`Opening page ${i + 1} of ${targets.length}: ${targets[i].name}`);
         try {
+            const waitUntilTime = targets[i].storeName == 'Mediaworld' ? 'networkidle2' : 'domcontentloaded'
             if (i == 0) {
                 const pages = await browser.pages();
                 await pages[0].setRequestInterception(true)
@@ -67,7 +68,7 @@ const openEveryPages = async (browser, targets) => {
                 });
 
                 console.time('open and scan')
-                await pages[0].goto(targets[0].url, { waitUntil: 'domcontentloaded', timeout: 10000 })
+                await pages[0].goto(targets[0].url, { waitUntil: waitUntilTime, timeout: 15000 })
                 pages[0].available = targets[0].available
                 pages[0].storeIndex = 0
                 await scanPage(pages[0], targets[0])
@@ -86,7 +87,7 @@ const openEveryPages = async (browser, targets) => {
                         interceptedRequest.continue();
                 });
                 console.time('open and scan')
-                await page.goto(targets[i].url, { waitUntil: 'domcontentloaded', timeout: 10000 })
+                await page.goto(targets[i].url, { waitUntil: waitUntilTime, timeout: 15000 })
                 page.available = targets[i].available
                 page.storeIndex = i
                 await scanPage(page, targets[i]);
@@ -98,30 +99,6 @@ const openEveryPages = async (browser, targets) => {
     }
     const pages = await browser.pages();
     return pages;
-}
-
-const reloadEveryPages = async (pages, firstLoading) => {
-    let i = 0
-    for (const page of pages) {
-        try {
-            const target = targets[i];
-            await page.setCacheEnabled(false)
-            await page.bringToFront();
-
-            console.log(`Scanning ${target.name}`)
-            console.time('reload');
-            !firstLoading
-                ? await page.goto(target.url, { waitUntil: 'domcontentloaded', timeout: 10000 })
-                : false
-            console.timeEnd('reload');
-            await scanPage(page, target)
-            await page.waitForTimeout(500)
-        } catch (error) {
-            console.error(`Errore 2: ${error.message}`)
-        }
-        i++
-    }
-    firstLoading = false
 }
 
 const scanPage = async (page, target) => {
@@ -154,14 +131,17 @@ const scanPage = async (page, target) => {
                 updateStores(page.available, page.storeIndex)
             }
         } else {
-            const priceElement = await page.$('#priceblock_ourprice');
-            if (priceElement != null) {
-                price = await page.evaluate(el => el.textContent, priceElement)
-                price = parseInt(price.replace('.', ''))
+            if (target.storeName == 'Amazon') {
+                const priceElement = await page.$('#priceblock_ourprice');
+                if (priceElement != null) {
+                    price = await page.evaluate(el => el.textContent, priceElement)
+                    price = parseInt(price.replace('.', ''))
+                } else {
+                    price = 0
+                }
             } else {
-                price = 0
+                price = target.price - 1;
             }
-
             if (price < target.price && price > target.price - 10) {
                 if (!page.available) {
                     sendTelegramNotification({ ...target, currentPrice: price })
@@ -194,7 +174,7 @@ const updateStores = (stockStatus, storeIndex) => {
 const sendTelegramNotification = async (target, text = false, silent = false) => {
     try {
         const defaultMsg = `
-*{AMAZON ${target.nation}}*
+*{${target.storeName} ${target.nation}}*
 ⚠️ *${target.name} è disponibile!!!* ⚠️
 🛒 *Url: ${target.url}*
 
