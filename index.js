@@ -174,9 +174,9 @@ const updateStores = (stockStatus, storeIndex) => {
 const sendTelegramNotification = async (target, text = false, silent = false) => {
     try {
         const defaultMsg = `
-*{${target.storeName} ${target.nation}}*
-⚠️ *${target.name} è disponibile!!!* ⚠️
-🛒 *Url: ${target.url}*
+{${target.storeName} ${target.nation}}
+⚠️ ${target.name} è disponibile!!! ⚠️
+🛒 Url: ${target.url}
 
 `
         const openInApp = `📱 [Apri in app](${target.longUrl})`
