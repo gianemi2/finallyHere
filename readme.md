@@ -1,4 +1,7 @@
 # Finally Here Notify 
+
+![Finally Here Logo](https://6emme.it/wp-content/uploads/2021/04/finally-here-img.jpg)
+
 A super easy, and not well made, bot for a lot of shops notifications. 
 
 [Donations](https://ko-fi.com/gianemi2)
