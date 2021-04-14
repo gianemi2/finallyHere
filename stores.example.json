@@ -1,13 +1,45 @@
-[
+[{
+    "id": 0,
+    "storeName": "Amazon",
+    "nation": "🇮🇹",
+    "url": "INSERT URL AMAZON",
+    "name": "PS5 Digital AMZN",
+    "selector": "#add-to-cart-button",
+    "price": 401,
+    "category": "console",
+    "available": false
+  },
   {
-    "id":0,
-    "storeName":"Amazon",
-    "nation":"🇮🇹",
-    "url":"https://amzn.to/3k17ktH",
-    "name":"PS5 Digital AMZN",
-    "selector":"#add-to-cart-button",
-    "price":401,
-    "category":"console",
-    "available":false
+    "id": 1,
+    "storeName": "Euronics",
+    "nation": "🇮🇹",
+    "url": "INSERT URL Euronics",
+    "name": "PS5 Digital Euronics",
+    "selector": "'.buttonWrapper .button--blue.cart__cta'",
+    "price": 401,
+    "category": "console",
+    "available": false
+  },
+  {
+    "id": 2,
+    "storeName": "Gamestop",
+    "nation": "🇮🇹",
+    "url": "INSERT URL Gamestop",
+    "name": "PS5 Digital Gamestop",
+    "selector": "#btnAddToCart",
+    "price": 401,
+    "category": "console",
+    "available": false
+  },
+  {
+    "id": 3,
+    "storeName": "Trony",
+    "nation": "🇮🇹",
+    "url": "INSERT URL Trony",
+    "name": "PS5 Digital Trony",
+    "selector": "#disponibile",
+    "price": 401,
+    "category": "console",
+    "available": false
   }
 ]
